@@ -1,7 +1,8 @@
 import {
   ADD_OBJECT_FIELD_TYPE,
   ADD_OBJECT_TYPE,
-  MODIFY_OBJECT_TYPE_VALUE
+  MODIFY_OBJECT_TYPE_VALUE,
+  MODIFY_OBJECT_TITLE
 } from '../actions';
 import uniq from 'lodash/uniq';
 
@@ -45,6 +46,15 @@ export const objectTypesReducer = (
       if(!oldState.titleFieldId){
         oldState.titleFieldId = id;
       }
+      return {
+        ...state,
+        byId: { ...state.byId, [objectTypeId]: {...oldState} }
+      };
+    }
+    case MODIFY_OBJECT_TITLE: {
+      const { id, objectTypeId } = action.payload;
+      const oldState = {...state.byId[objectTypeId]};
+      oldState.titleFieldId = id;
       return {
         ...state,
         byId: { ...state.byId, [objectTypeId]: {...oldState} }

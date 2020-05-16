@@ -28,3 +28,10 @@ export const MODIFY_OBJECT_FIELD_TYPE =
 export const modifyObjectFieldType = createAction(
   MODIFY_OBJECT_FIELD_TYPE
 );
+
+export const MODIFY_OBJECT_TITLE =
+  'objector.modify.object.title.type';
+
+export const modifyObjectTitle = createAction(
+  MODIFY_OBJECT_TITLE
+);

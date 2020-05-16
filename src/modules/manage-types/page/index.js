@@ -29,17 +29,13 @@ class MangeTypesPageComponent extends PureComponent {
           </Col>
         </Row>
         <div className="object-type">
-          <Row className="flex-wrap">
             {objectTypes.map((datum) => {
               return (
-                <Col key={datum.id}>
                   <MangeTypeForm
                     data={datum}
                   />
-                </Col>
               )
             })}
-            </Row>
         </div>
       </div>
     );
@@ -78,6 +74,8 @@ export const MangeTypesPage =  styled(
   }
   .object-type {
     padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
   }
   
 `;

@@ -11,7 +11,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import uniqid from 'uniqid';
 import { Input, Label, Select } from "../../../common/components";
-import { modifyObjectTypeValues, addObjectFieldType, modifyObjectFieldType } from "../actions";
+import { modifyObjectTypeValues, addObjectFieldType, modifyObjectFieldType, modifyObjectTitle } from "../actions";
 import { INPUT_TYPE_ENUM, INPUT_TYPE_ENUM_VALUE } from '../../../constant';
 import { getFieldList } from '../selectors/index.selector';
 
@@ -29,7 +29,8 @@ export const FormikForm = ({
    modifyObjectTypeValues,
    data,
    handleObjectFieldType,
-   modifyObjectFieldType
+   modifyObjectFieldType,
+   modifyObjectTitle
  }) => {
 
   const _handleObjectStaticFields = (name, value) => {
@@ -47,7 +48,7 @@ export const FormikForm = ({
           </Col>
           <Col xs={12} className={"field-row"}>
               <Label>Object Title</Label>
-              <Select value={values.objectTitleId}>
+              <Select value={values.objectTitleId} onChange={(e)=> modifyObjectTitle({id: e.target.value, objectTypeId: data.id })}>
                 {values.fields.map((datum) => {
                   return (
                     <option key={datum.id} value={datum.id}>{datum.name}</option>
@@ -179,7 +180,8 @@ const mapDispatchToProps = (dispatch) => {
     {
       modifyObjectTypeValues,
       addObjectFieldType,
-      modifyObjectFieldType
+      modifyObjectFieldType,
+      modifyObjectTitle
     },
     dispatch
   );
@@ -190,7 +192,9 @@ export const MangeTypeForm = styled(
 )`
   width: 300px;
   border: solid 1px #ccc;
+  margin-right: 10px;
   border-radius: 4px;
+  margin-bottom: 10px;
   .field-row {
     margin-bottom: 10px;
   }
