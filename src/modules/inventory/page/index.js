@@ -53,7 +53,6 @@ const mapStateToProps = (state, {match}) => {
   const objectType = getObjectType(state, id);
   const objectFields = getObjectFields(state,objectType?.fieldIds??[]);
   const inventories = getInventories(state,id);
-  console.log('inventories', inventories)
   return {
     objectType,
     objectFields,

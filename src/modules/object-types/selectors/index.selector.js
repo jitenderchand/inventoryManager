@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import map from 'lodash/map';
 import { getAllObjectTypeIdsSelector, getObjectTypeByIdSelector } from '../reducers/object-types.reducer';
-import { getFieldTypeByIdSelector } from '../reducers/object-types-field.reducer';
+import { getAllFieldTypeIdsSelector, getFieldTypeByIdSelector } from '../reducers/object-types-field.reducer';
 
 export const getObjectTypes = createSelector(
   getAllObjectTypeIdsSelector,
@@ -28,6 +28,17 @@ export const getFieldList = createSelector(
     objectFieldById
   ) => {
     const fieldIds = objectType?.fieldIds ?? [];
+    return map(fieldIds, (datum) => objectFieldById[datum]);
+  }
+);
+
+export const getAllFieldList = createSelector(
+  getAllFieldTypeIdsSelector,
+  getFieldTypeByIdSelector,
+  (
+    fieldIds,
+    objectFieldById
+  ) => {
     return map(fieldIds, (datum) => objectFieldById[datum]);
   }
 );

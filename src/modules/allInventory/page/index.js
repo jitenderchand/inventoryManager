@@ -2,17 +2,21 @@ import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import uniqid from 'uniqid';
 import { getAllInventories } from '../selector/index.selector';
+import { getAllFieldList } from '../../object-types/selectors/index.selector';
 import { addInventory } from '../../inventory/actions'
 import { InventoryTypeForm } from '../components/Inventory.form.component';
+import { getObjectTypes } from "../../object-types/selectors/index.selector";
+import Dropdown from "react-bootstrap/Dropdown";
+
 
 class AllInventoryPageComponent extends PureComponent {
-  _handleAddTypes = () => {
-    const { addInventory, objectType, objectFields } = this.props;
+  _handleAddTypes = (objectTypeId, name) => {
+    const { addInventory, allFields } = this.props;
     const id = uniqid();
+    const objectFields = allFields.filter((datum) => datum.objectTypeId === objectTypeId );
     const fields = objectFields.map((datum) => {
       return {
           id: datum.id,
@@ -21,15 +25,24 @@ class AllInventoryPageComponent extends PureComponent {
           type: datum.inputType
       }
     });
-    addInventory({id, objectTypeId: objectType.id, title: objectType.name, fields });
+    addInventory({id, objectTypeId, title: name, fields });
   }
 
   render() {
-    const { className, inventories } = this.props;
+    const { className, inventories, objectTypes } = this.props;
     return (
       <div className={className}>
         <div className={"action--strip"}>
-          <Button variant="primary" onClick={this._handleAddTypes}>Add Type</Button>
+          <Dropdown className={"action-dropdown"}>
+            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+              Add Item
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {objectTypes.map((datum, index) => {
+                return <Dropdown.Item key={index} onClick={() => this._handleAddTypes(datum.id, datum.name)}>{datum.name}</Dropdown.Item>
+              })}
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
         <div className="object-type">
           {inventories.map((datum) => {
@@ -49,9 +62,12 @@ class AllInventoryPageComponent extends PureComponent {
 /* istanbul ignore next */
 const mapStateToProps = (state) => {
   const inventories = getAllInventories(state);
-  console.log('inventories', inventories)
+  const objectTypes = getObjectTypes(state);
+  const allFields = getAllFieldList(state);
   return {
-    inventories
+    inventories,
+    objectTypes,
+    allFields
   };
 };
 
