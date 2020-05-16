@@ -1,6 +1,7 @@
 import uniq from 'lodash/uniq';
 import {
-  ADD_INVENTORY
+  ADD_INVENTORY, MODIFY_INVENTORY_FIELD_VALUE,
+  DELETE_INVENTORY
 } from '../actions';
 
 
@@ -26,6 +27,35 @@ export const inventoryReducer = (
         ...state,
         byId: { ...state.byId, [id]: model },
         allIds: uniq([...state.allIds, id])
+      };
+    }
+    case MODIFY_INVENTORY_FIELD_VALUE: {
+      const { id, value, inventoryId } = action.payload;
+      const cloneState = {...state.byId[inventoryId]};
+      cloneState.fields = cloneState.fields.map((datum) => {
+        if(datum.id === id){
+          return {
+            ...datum,
+            value
+          }
+        }
+        return {
+          ...datum
+        }
+      });
+      return {
+        ...state,
+        byId: { ...state.byId, [inventoryId]: {...cloneState} }
+      };
+    }
+    case DELETE_INVENTORY: {
+      const inventoryId = action.payload;
+      const cloneState = {...state.byId};
+      delete cloneState[inventoryId];
+      return {
+        ...state,
+        byId: { ...cloneState },
+        allIds: state.allIds.filter((id) => id != inventoryId)
       };
     }
     default:

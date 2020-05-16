@@ -17,7 +17,8 @@ class InventoryPageComponent extends PureComponent {
       return {
           id: datum.id,
           name: datum.name,
-          value: ''
+          value: datum.value,
+          type: datum.inputType
       }
     });
     addInventory({id, objectTypeId: objectType.id, title: objectType.name, fields });

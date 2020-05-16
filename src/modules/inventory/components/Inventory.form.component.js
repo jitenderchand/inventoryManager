@@ -4,16 +4,14 @@ import React, {
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { bindActionCreators } from "redux";
-import { Formik, FieldArray } from 'formik';
+import { Formik } from 'formik';
 import Container from 'react-bootstrap/Container';
-import Dropdown from 'react-bootstrap/Dropdown';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ClearIcon from '@material-ui/icons/Clear';
-import uniqid from 'uniqid';
-import { Input, Label, Select } from "../../../common/components";
-import { INPUT_TYPE_ENUM, INPUT_TYPE_ENUM_VALUE } from '../../../constant';
-
+import { Input, Label } from "../../../common/components";
+import { INPUT_TYPE_ENUM } from '../../../constant';
+import { modifyInventory, deleteInventory } from '../actions';
 
 
 export const FormikForm = ({
@@ -27,20 +25,26 @@ export const FormikForm = ({
    initialValues,
    handleSubmit,
    data,
-   objectType
+   modifyInventory
  }) => {
   const fields = data.fields;
-  console.log(fields)
   return (
     <Container>
       <form onSubmit={handleSubmit}>
         <Row>
           {fields.map((datum) => {
-            console.log('datum', datum)
+            let type = "text";
+            if(datum.type === INPUT_TYPE_ENUM.NUMBER){
+              type = 'number';
+            }
+            if(datum.type === INPUT_TYPE_ENUM.DATE){
+              type = 'date';
+            }
+            console.log('datumdatum', datum)
             return (
               <Col key={datum.id} xs={12} className={"field-row"}>
                 <Label>{datum.name}</Label>
-                <Input value={datum.value} />
+                <Input type={type} value={datum.value} onChange={(e) => modifyInventory({inventoryId: data.id, id: datum.id, value: e.target.value })} />
               </Col>
             )
           })}
@@ -60,14 +64,14 @@ class InventoryTypeFormComponent extends PureComponent {
   }
 
   render() {
-    const { className, data, objectType } = this.props;
+    const { className, data, objectType, deleteInventory } = this.props;
     const { title, id, fields } = data;
     const { titleFieldId } = objectType;
     const titlePartFromFieldValue = fields.find((datum) => { return datum.id === titleFieldId})?.value ?? '';
     return (
       <div className={className}>
         <h4>{`${title} - ${titlePartFromFieldValue}`}</h4>
-        <button className="close-btn">
+        <button className="close-btn" onClick={()=> deleteInventory(id)}>
           <ClearIcon />
         </button>
         <Formik
@@ -104,6 +108,8 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
+      modifyInventory,
+      deleteInventory
     },
     dispatch
   );

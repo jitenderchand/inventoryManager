@@ -20,7 +20,8 @@ export const objectTypesFieldReducer = (
         id,
         objectTypeId,
         inputType,
-        name: name || ''
+        name: name || '',
+        value: ''
       }
       return {
         ...state,

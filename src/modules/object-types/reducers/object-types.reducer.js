@@ -63,13 +63,13 @@ export const objectTypesReducer = (
       };
     }
     case DELETE_OBJECT_TYPE: {
-      const id = action.payload;
+      const objectTypeId = action.payload;
       const cloneState = {...state.byId};
-      delete cloneState[id];
+      delete cloneState[objectTypeId];
       return {
         ...state,
         byId: { ...cloneState },
-        allIds: state.allIds.filter((id) => id != id)
+        allIds: state.allIds.filter((id) => id !== objectTypeId)
       };
     }
     default:
