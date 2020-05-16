@@ -40,7 +40,6 @@ export const FormikForm = ({
             if(datum.type === INPUT_TYPE_ENUM.DATE){
               type = 'date';
             }
-            console.log('datumdatum', datum)
             return (
               <Col key={datum.id} xs={12} className={"field-row"}>
                 <Label>{datum.name}</Label>
