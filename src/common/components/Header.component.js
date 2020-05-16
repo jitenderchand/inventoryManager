@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import { getCurrentCampaignsPage } from "../../modules/manage-types/selectors/index.selector";
+import { getObjectTypes } from "../../modules/object-types/selectors/index.selector";
 
 const HeaderComponent = ({
     className,
@@ -23,7 +23,7 @@ const HeaderComponent = ({
             <Nav className="mr-auto">
               {objectTypes.map((datum) => {
                 return (
-                  <Link to={`/type/${datum.id}`}>
+                  <Link key={datum.id} to={`/type/${datum.id}`}>
                     {datum.name}
                   </Link>
                 )
@@ -39,7 +39,7 @@ const HeaderComponent = ({
 };
 
 const mapStateToProps = (state) => {
-  const objectTypes = getCurrentCampaignsPage(state);
+  const objectTypes = getObjectTypes(state);
   return {
     objectTypes
   };

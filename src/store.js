@@ -5,12 +5,13 @@ import {
 } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-import { objectTypesReducer } from './modules/manage-types/reducers/object-types.reducer';
-import { objectTypesFieldReducer } from './modules/manage-types/reducers/object-types-field.reducer';
+import { objectTypesReducer } from './modules/object-types/reducers/object-types.reducer';
+import { objectTypesFieldReducer } from './modules/object-types/reducers/object-types-field.reducer';
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
 
-
-const reducer= combineReducers({
+const reducer = combineReducers({
   objectTypes: objectTypesReducer,
   objectTypesField: objectTypesFieldReducer,
   inventory: () => {
@@ -24,8 +25,16 @@ if (process.env.NODE_ENV !== 'production') {
   middlewares.push(logger);
 }
 
-const store = createStore(
-  reducer,
-  applyMiddleware(...middlewares)
-);
-export { store };
+const persistConfig = {
+  key: 'root',
+  storage,
+}
+
+const persistedReducer = persistReducer(persistConfig, reducer);
+
+
+export default () => {
+  let store = createStore(persistedReducer, applyMiddleware(...middlewares))
+  let persistor = persistStore(store)
+  return { store, persistor }
+}

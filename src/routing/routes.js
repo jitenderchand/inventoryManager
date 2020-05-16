@@ -7,7 +7,8 @@ import {
 import { ROUTES } from "../constant";
 import { PermissionDeniedComponent } from "../common/components/PermissionDenied.component";
 import { Header } from "../common/components";
-import { MangeTypesPage } from '../modules/manage-types/page'
+import { ObjectTypesPage } from '../modules/object-types/page'
+import { InventoryPage } from '../modules/inventory/page'
 
 const AppRoutes = () => {
   return (
@@ -17,11 +18,9 @@ const AppRoutes = () => {
         <Route path={ROUTES.HOME} exact>
           <div>inventory page</div>
         </Route>
-        <Route path={ROUTES.TYPE} exact>
-          <div>filter page</div>
-        </Route>
+        <Route render={({ match }) => <InventoryPage match={match} />} path={ROUTES.TYPE} exact />
         <Route path={ROUTES.TYPES} exact>
-          <MangeTypesPage />
+          <ObjectTypesPage />
         </Route>
         <Route path={"/*"} exact>
           <PermissionDeniedComponent />

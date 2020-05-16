@@ -112,10 +112,13 @@ export const FormikForm = ({
   );
 };
 
-class MangeTypeFormComponent extends PureComponent {
+class ObjectTypeFormComponent extends PureComponent {
 
   componentDidMount(){
-    this._handleObjectFieldType(INPUT_TYPE_ENUM.SMALL_TEXT, 'Title');
+    const { fields } = this.props;
+    if(!fields.length){
+      this._handleObjectFieldType(INPUT_TYPE_ENUM.SMALL_TEXT, 'Title');
+    }
   }
 
   _handleObjectFieldType = (inputType, name) => {
@@ -192,8 +195,8 @@ const mapDispatchToProps = (dispatch) => {
   );
 };
 
-export const MangeTypeForm = styled(
-  connect(mapStateToProps, mapDispatchToProps)(MangeTypeFormComponent)
+export const ObjectTypeForm = styled(
+  connect(mapStateToProps, mapDispatchToProps)(ObjectTypeFormComponent)
 )`
   width: 300px;
   border: solid 1px #ccc;

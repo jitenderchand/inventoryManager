@@ -5,8 +5,8 @@ import { bindActionCreators } from 'redux';
 import Button from 'react-bootstrap/Button';
 import uniqid from 'uniqid';
 import { addObjectType } from '../actions'
-import { getCurrentCampaignsPage } from '../selectors/index.selector';
-import { MangeTypeForm } from '../components/Manage-types.form.component';
+import { getObjectTypes  } from '../selectors/index.selector';
+import { ObjectTypeForm } from '../components/Object-types.form.component';
 
 
 class MangeTypesPageComponent extends PureComponent {
@@ -27,7 +27,7 @@ class MangeTypesPageComponent extends PureComponent {
         <div className="object-type">
             {objectTypes.map((datum) => {
               return (
-                  <MangeTypeForm
+                  <ObjectTypeForm
                     key={datum.id}
                     data={datum}
                   />
@@ -41,7 +41,7 @@ class MangeTypesPageComponent extends PureComponent {
 
 /* istanbul ignore next */
 const mapStateToProps = (state) => {
-  const objectTypes = getCurrentCampaignsPage(state);
+  const objectTypes = getObjectTypes(state);
   return {
     objectTypes
   };
@@ -56,7 +56,7 @@ const mapDispatchToProps = (dispatch) => {
   );
 };
 
-export const MangeTypesPage =  styled(
+export const ObjectTypesPage =  styled(
   connect(
     mapStateToProps,
     mapDispatchToProps

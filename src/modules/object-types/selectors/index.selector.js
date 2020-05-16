@@ -3,7 +3,7 @@ import map from 'lodash/map';
 import { getAllObjectTypeIdsSelector, getObjectTypeByIdSelector } from '../reducers/object-types.reducer';
 import { getFieldTypeByIdSelector } from '../reducers/object-types-field.reducer';
 
-export const getCurrentCampaignsPage = createSelector(
+export const getObjectTypes = createSelector(
   getAllObjectTypeIdsSelector,
   getObjectTypeByIdSelector,
   (typeIds, typesById) => {
