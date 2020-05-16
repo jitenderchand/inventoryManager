@@ -7,6 +7,7 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { objectTypesReducer } from './modules/object-types/reducers/object-types.reducer';
 import { objectTypesFieldReducer } from './modules/object-types/reducers/object-types-field.reducer';
+import { inventoryReducer } from './modules/inventory/reducers/inventory.reducer';
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
@@ -14,9 +15,7 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 const reducer = combineReducers({
   objectTypes: objectTypesReducer,
   objectTypesField: objectTypesFieldReducer,
-  inventory: () => {
-    return null
-  },
+  inventory: inventoryReducer,
 });
 
 const middlewares= [];

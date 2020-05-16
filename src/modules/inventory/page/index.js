@@ -4,27 +4,42 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
-import { getObjectType } from '../selector/index.selector';
-import { addInventory } from '../actions'
 import uniqid from 'uniqid';
+import { getObjectType, getObjectFields, getInventories } from '../selector/index.selector';
+import { addInventory } from '../actions'
+import { InventoryTypeForm } from '../components/Inventory.form.component';
 
 class InventoryPageComponent extends PureComponent {
   _handleAddTypes = () => {
-    const { addInventory } = this.props;
+    const { addInventory, objectType, objectFields } = this.props;
     const id = uniqid();
-    addInventory(id);
+    const fields = objectFields.map((datum) => {
+      return {
+          id: datum.id,
+          name: datum.name,
+          value: ''
+      }
+    });
+    addInventory({id, objectTypeId: objectType.id, title: objectType.name, fields });
   }
 
   render() {
-    const { className, objectType } = this.props;
-    console.log('objectType', objectType)
+    const { className, objectType, inventories } = this.props;
     return (
       <div className={className}>
         <div className={"action--strip"}>
           <Button variant="primary" onClick={this._handleAddTypes}>Add Type</Button>
         </div>
         <div className="object-type">
-
+          {inventories.map((datum) => {
+            return (
+              <InventoryTypeForm
+                objectType={objectType}
+                data={datum}
+                key={datum.id}
+              />
+            )
+          })}
         </div>
       </div>
     );
@@ -34,9 +49,13 @@ class InventoryPageComponent extends PureComponent {
 /* istanbul ignore next */
 const mapStateToProps = (state, {match}) => {
   const id = match.params.id;
-  const objectType = getObjectType(state, id)
+  const objectType = getObjectType(state, id);
+  const objectFields = getObjectFields(state,objectType?.fieldIds??[]);
+  const inventories = getInventories(state,id);
   return {
-    objectType
+    objectType,
+    objectFields,
+    inventories
   };
 };
 
