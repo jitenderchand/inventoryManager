@@ -12,7 +12,7 @@ import Col from 'react-bootstrap/Col';
 import uniqid from 'uniqid';
 import { Input, Label, Select } from "../../../common/components";
 import { modifyObjectTypeValues, addObjectFieldType } from "../actions";
-import { INPUT_TYPE_ENUM } from '../../../constant';
+import { INPUT_TYPE_ENUM, INPUT_TYPE_ENUM_VALUE } from '../../../constant';
 import { getFieldList } from '../selectors/index.selector';
 
 
@@ -27,7 +27,8 @@ export const FormikForm = ({
    initialValues,
    handleSubmit,
    modifyObjectTypeValues,
-   data
+   data,
+   handleObjectFieldType
  }) => {
 
   const _handleObjectStaticFields = (name, value) => {
@@ -59,22 +60,35 @@ export const FormikForm = ({
               name="fields"
               render={() => (
                 <div>
-                  {values.fields.map((datum ) => (
-                    <Input value={datum.name} key={datum.id} />
-                  ))}
+                  {values.fields.map((datum) => {
+                    let inputType = "text";
+                    if(datum.inputType === INPUT_TYPE_ENUM.DATE){
+                        inputType = "date";
+                    }
+                    if(datum.inputType === INPUT_TYPE_ENUM.NUMBER){
+                        inputType = "number";
+                    }
+                    return (
+                      <div className="field-row">
+                        <Input type={inputType} placeholder={"Enter field name"} value={datum.name} key={datum.id} />
+                      </div>
+                    )
+                  }
+                  )}
                 </div>
               )}
             />
           </Col>
           <Col xs={12} className={"field-row"}>
-            <Dropdown>
+            <Dropdown className={"action-dropdown"}>
               <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                 Add Field
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item>Action</Dropdown.Item>
-                <Dropdown.Item>Another action</Dropdown.Item>
-                <Dropdown.Item>Something else</Dropdown.Item>
+                {Object.keys(INPUT_TYPE_ENUM).map((datum) => {
+                  const label = INPUT_TYPE_ENUM_VALUE[datum];
+                  return <Dropdown.Item onClick={() => handleObjectFieldType(datum)}>{INPUT_TYPE_ENUM_VALUE[datum]}</Dropdown.Item>
+                })}
               </Dropdown.Menu>
             </Dropdown>
           </Col>
@@ -87,13 +101,13 @@ export const FormikForm = ({
 class MangeTypeFormComponent extends PureComponent {
 
   componentDidMount(){
-    this._handleObjectFieldType();
+    this._handleObjectFieldType(INPUT_TYPE_ENUM.SMALL_TEXT, 'Title');
   }
 
-  _handleObjectFieldType = () => {
+  _handleObjectFieldType = (inputType, name) => {
     const { data, addObjectFieldType } = this.props;
     const id = uniqid();
-    addObjectFieldType({objectTypeId: data.id, id, inputType: INPUT_TYPE_ENUM.SMALL_TEXT, name: 'Title' })
+    addObjectFieldType({objectTypeId: data.id, id, inputType: inputType, name })
   }
 
 
@@ -129,6 +143,7 @@ class MangeTypeFormComponent extends PureComponent {
                 {...formikProps}
                 {...this.props}
                 {...this.state}
+                handleObjectFieldType={this._handleObjectFieldType}
               />
             );
           }}
@@ -176,5 +191,10 @@ export const MangeTypeForm = styled(
     border-bottom: solid 1px #ccc;
     word-break: break-all;
     padding-right: 30px;
+  }
+  .action-dropdown {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
   }
 `;
