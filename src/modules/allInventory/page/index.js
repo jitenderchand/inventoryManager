@@ -5,11 +5,11 @@ import { bindActionCreators } from 'redux';
 import Button from 'react-bootstrap/Button';
 import { withRouter } from 'react-router-dom';
 import uniqid from 'uniqid';
-import { getObjectType, getObjectFields, getInventories } from '../selector/index.selector';
-import { addInventory } from '../actions'
+import { getAllInventories } from '../selector/index.selector';
+import { addInventory } from '../../inventory/actions'
 import { InventoryTypeForm } from '../components/Inventory.form.component';
 
-class InventoryPageComponent extends PureComponent {
+class AllInventoryPageComponent extends PureComponent {
   _handleAddTypes = () => {
     const { addInventory, objectType, objectFields } = this.props;
     const id = uniqid();
@@ -25,7 +25,7 @@ class InventoryPageComponent extends PureComponent {
   }
 
   render() {
-    const { className, objectType, inventories } = this.props;
+    const { className, inventories } = this.props;
     return (
       <div className={className}>
         <div className={"action--strip"}>
@@ -35,7 +35,6 @@ class InventoryPageComponent extends PureComponent {
           {inventories.map((datum) => {
             return (
               <InventoryTypeForm
-                objectType={objectType}
                 data={datum}
                 key={datum.id}
               />
@@ -48,15 +47,10 @@ class InventoryPageComponent extends PureComponent {
 }
 
 /* istanbul ignore next */
-const mapStateToProps = (state, {match}) => {
-  const id = match.params.id;
-  const objectType = getObjectType(state, id);
-  const objectFields = getObjectFields(state,objectType?.fieldIds??[]);
-  const inventories = getInventories(state,id);
+const mapStateToProps = (state) => {
+  const inventories = getAllInventories(state);
   console.log('inventories', inventories)
   return {
-    objectType,
-    objectFields,
     inventories
   };
 };
@@ -70,11 +64,11 @@ const mapDispatchToProps = (dispatch) => {
   );
 };
 
-export const InventoryPage =  styled(
+export const AllInventoryPage =  styled(
   connect(
     mapStateToProps,
     mapDispatchToProps
-  )(withRouter(InventoryPageComponent))
+  )(withRouter(AllInventoryPageComponent))
 )`
   .action--strip {
     height: 50px;

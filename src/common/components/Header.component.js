@@ -21,6 +21,9 @@ const HeaderComponent = ({
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
+              <Link to={`/`}>
+                All
+              </Link>
               {objectTypes.map((datum) => {
                 return (
                   <Link key={datum.id} to={`/type/${datum.id}`}>

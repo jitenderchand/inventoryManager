@@ -31,9 +31,11 @@ export const getInventories = createSelector(
   getAllInventoryIdsSelector,
   getInventoryByIdSelector,
   (typeIds, inventoryIds, inventoryById ) => {
-    const desiredIds = inventoryIds.filter((id) => id !== typeIds);
-    return map(desiredIds, (datum) => {
+    const data = map(inventoryIds, (datum) => {
       return inventoryById[datum];
     });
+    return data.filter((datum) => {
+      return datum.objectTypeId === typeIds;
+    })
   }
 );

@@ -9,6 +9,7 @@ import { PermissionDeniedComponent } from "../common/components/PermissionDenied
 import { Header } from "../common/components";
 import { ObjectTypesPage } from '../modules/object-types/page'
 import { InventoryPage } from '../modules/inventory/page'
+import { AllInventoryPage } from '../modules/allInventory/page'
 
 const AppRoutes = () => {
   return (
@@ -16,7 +17,7 @@ const AppRoutes = () => {
       <Header />
       <Switch>
         <Route path={ROUTES.HOME} exact>
-          <div>inventory page</div>
+          <AllInventoryPage />
         </Route>
         <Route render={({ match }) => <InventoryPage match={match} />} path={ROUTES.TYPE} exact />
         <Route path={ROUTES.TYPES} exact>
