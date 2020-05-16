@@ -4,12 +4,15 @@ import {
   Switch,
   withRouter
 } from 'react-router-dom';
-
 import { ROUTES } from "../constant";
+import { PermissionDeniedComponent } from "../common/components/PermissionDenied.component";
+import { Header } from "../common/components";
+import { MangeTypesPage } from '../modules/manage-types/page'
 
 const AppRoutes = () => {
   return (
     <>
+      <Header />
       <Switch>
         <Route path={ROUTES.HOME} exact>
           <div>inventory page</div>
@@ -18,7 +21,10 @@ const AppRoutes = () => {
           <div>filter page</div>
         </Route>
         <Route path={ROUTES.TYPES} exact>
-          <div>Manage type page</div>
+          <MangeTypesPage />
+        </Route>
+        <Route path={"/*"} exact>
+          <PermissionDeniedComponent />
         </Route>
       </Switch>
     </>

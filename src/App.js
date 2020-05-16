@@ -1,7 +1,6 @@
 import React, { StrictMode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Routes from './routing/routes';
-import './App.css';
 
 const App = () => {
   return (
