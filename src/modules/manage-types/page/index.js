@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Button from 'react-bootstrap/Button';
 import uniqid from 'uniqid';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { addObjectType } from '../actions'
 import { getCurrentCampaignsPage } from '../selectors/index.selector';
 import { MangeTypeForm } from '../components/Manage-types.form.component';
@@ -23,15 +21,14 @@ class MangeTypesPageComponent extends PureComponent {
     const { className, objectTypes } = this.props;
     return (
       <div className={className}>
-        <Row className={"action--strip justify-content-end"}>
-          <Col xs={1}>
-            <Button variant="primary" onClick={this._handleAddTypes}>Add Type</Button>
-          </Col>
-        </Row>
+        <div className={"action--strip"}>
+           <Button variant="primary" onClick={this._handleAddTypes}>Add Type</Button>
+        </div>
         <div className="object-type">
             {objectTypes.map((datum) => {
               return (
                   <MangeTypeForm
+                    key={datum.id}
                     data={datum}
                   />
               )
@@ -71,6 +68,9 @@ export const MangeTypesPage =  styled(
     border-bottom: solid 1px #b9b9b9;
     display: flex;
     align-items: center;
+    padding:0 10px;
+    text-align: right;
+    justify-content: flex-end;
   }
   .object-type {
     padding: 20px;

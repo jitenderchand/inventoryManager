@@ -2,35 +2,51 @@ import React  from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import { getCurrentCampaignsPage } from "../../modules/manage-types/selectors/index.selector";
 
 const HeaderComponent = ({
     className,
+    objectTypes
   }) => {
   return (
       <div className={className}>
-        <h5>Objector</h5>
-        <nav className="app-header--navigation">
-          <ul>
-            <Link to="/types">Manage Types</Link>
-          </ul>
-        </nav>
+        <Navbar bg="light" expand="lg" className={"app-header--navigation "}>
+          <Navbar.Brand>
+            <Link to={`/`}>
+              Objector
+            </Link>
+          </Navbar.Brand>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+              {objectTypes.map((datum) => {
+                return (
+                  <Link to={`/type/${datum.id}`}>
+                    {datum.name}
+                  </Link>
+                )
+              })}
+              <Link to={`/types`}>
+                Manage Types
+              </Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
       </div>
   );
 };
 
 const mapStateToProps = (state) => {
+  const objectTypes = getCurrentCampaignsPage(state);
   return {
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-
+    objectTypes
   };
 };
 
 export const Header = styled(
-  connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
+  connect(mapStateToProps)(HeaderComponent)
 )`
   background-color: #1976d2;
   min-height: 50px;
@@ -38,11 +54,16 @@ export const Header = styled(
   align-items: center;
   color: #fff;  
   padding: 0 10px;
+  .navbar-nav{
+    a {
+      display: inline-block;
+      margin-right: 15px;
+    } 
+  }
   .app-header--navigation {
-    padding-left: 20px;
+    background: transparent!important;
      a {
         color: #fff;
-        text-decoration: underline;
      }
   }
 `;
