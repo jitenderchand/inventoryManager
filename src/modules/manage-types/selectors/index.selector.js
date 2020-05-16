@@ -21,14 +21,13 @@ export const getFieldTypeForObjectType = (state, objectTypeId) => {
 
 
 export const getFieldList = createSelector(
-  getFieldTypeForObjectType ,
+  getFieldTypeForObjectType,
   getFieldTypeByIdSelector,
   (
     objectType,
     objectFieldById
   ) => {
     const fieldIds = objectType?.fieldIds ?? [];
-    console.log('fieldIds', fieldIds  )
     return map(fieldIds, (datum) => objectFieldById[datum]);
   }
 );

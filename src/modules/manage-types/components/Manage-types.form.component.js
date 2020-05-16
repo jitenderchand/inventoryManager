@@ -11,7 +11,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import uniqid from 'uniqid';
 import { Input, Label, Select } from "../../../common/components";
-import { modifyObjectTypeValues, addObjectFieldType } from "../actions";
+import { modifyObjectTypeValues, addObjectFieldType, modifyObjectFieldType } from "../actions";
 import { INPUT_TYPE_ENUM, INPUT_TYPE_ENUM_VALUE } from '../../../constant';
 import { getFieldList } from '../selectors/index.selector';
 
@@ -28,7 +28,8 @@ export const FormikForm = ({
    handleSubmit,
    modifyObjectTypeValues,
    data,
-   handleObjectFieldType
+   handleObjectFieldType,
+   modifyObjectFieldType
  }) => {
 
   const _handleObjectStaticFields = (name, value) => {
@@ -46,7 +47,7 @@ export const FormikForm = ({
           </Col>
           <Col xs={12} className={"field-row"}>
               <Label>Object Title</Label>
-              <Select>
+              <Select value={values.objectTitleId}>
                 {values.fields.map((datum) => {
                   return (
                     <option key={datum.id} value={datum.id}>{datum.name}</option>
@@ -61,16 +62,27 @@ export const FormikForm = ({
               render={() => (
                 <div>
                   {values.fields.map((datum) => {
-                    let inputType = "text";
-                    if(datum.inputType === INPUT_TYPE_ENUM.DATE){
-                        inputType = "date";
-                    }
-                    if(datum.inputType === INPUT_TYPE_ENUM.NUMBER){
-                        inputType = "number";
-                    }
+                    const { id, inputType, name } = datum;
                     return (
-                      <div className="field-row">
-                        <Input type={inputType} placeholder={"Enter field name"} value={datum.name} key={datum.id} />
+                      <div className="field-row clearfix" key={datum.id}>
+                        <div>
+                          <div className="input-col">
+                            <Input placeholder={"Enter field name"} value={datum.name} onChange={(e) => modifyObjectFieldType({id, inputType, name: e.target.value })} />
+                          </div>
+                          <div className="dropdown-col">
+                            <Dropdown>
+                              <Dropdown.Toggle variant="secondary" id={`dropdown-${datum.id}`}>
+                                {INPUT_TYPE_ENUM_VALUE[datum.inputType]}
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu>
+                                {Object.keys(INPUT_TYPE_ENUM).map((datum, index) => {
+                                  const label = INPUT_TYPE_ENUM_VALUE[datum];
+                                  return <Dropdown.Item key={index} onClick={() => modifyObjectFieldType({id, inputType: datum, name })}>{label}</Dropdown.Item>
+                                })}
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </div>
+                        </div>
                       </div>
                     )
                   }
@@ -85,9 +97,9 @@ export const FormikForm = ({
                 Add Field
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                {Object.keys(INPUT_TYPE_ENUM).map((datum) => {
+                {Object.keys(INPUT_TYPE_ENUM).map((datum, index) => {
                   const label = INPUT_TYPE_ENUM_VALUE[datum];
-                  return <Dropdown.Item onClick={() => handleObjectFieldType(datum)}>{INPUT_TYPE_ENUM_VALUE[datum]}</Dropdown.Item>
+                  return <Dropdown.Item key={index} onClick={() => handleObjectFieldType(datum)}>{label}</Dropdown.Item>
                 })}
               </Dropdown.Menu>
             </Dropdown>
@@ -121,6 +133,7 @@ class MangeTypeFormComponent extends PureComponent {
   render() {
     const { className, data, fields } = this.props;
     const { name } = data;
+    const objectTitleObj = fields.find((datum) => datum.id === data.titleFieldId) || '';
     return (
         <div className={className}>
           <h4>{name}</h4>
@@ -128,7 +141,7 @@ class MangeTypeFormComponent extends PureComponent {
           enableReinitialize
           initialValues={{
             objectType: name,
-            objectTitle: "",
+            objectTitleId: objectTitleObj?.id ?? '',
             fields: fields
           }}
           onSubmit={(
@@ -165,7 +178,8 @@ const mapDispatchToProps = (dispatch) => {
   return bindActionCreators(
     {
       modifyObjectTypeValues,
-      addObjectFieldType
+      addObjectFieldType,
+      modifyObjectFieldType
     },
     dispatch
   );
@@ -196,5 +210,16 @@ export const MangeTypeForm = styled(
     margin-top: 20px;
     margin-bottom: 20px;
     text-align: center;
+  }
+  .input-col {
+    float: left;
+    width: 60%;
+  }
+  .dropdown-col {
+    float: left;
+    width: 40%;
+    button {
+     width: 100%;
+    }
   }
 `;

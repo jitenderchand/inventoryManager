@@ -21,3 +21,10 @@ export const ADD_OBJECT_FIELD_TYPE =
 export const addObjectFieldType = createAction(
   ADD_OBJECT_FIELD_TYPE
 );
+
+export const MODIFY_OBJECT_FIELD_TYPE =
+  'objector.modify.object.field.type';
+
+export const modifyObjectFieldType = createAction(
+  MODIFY_OBJECT_FIELD_TYPE
+);

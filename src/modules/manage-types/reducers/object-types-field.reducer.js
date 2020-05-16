@@ -1,5 +1,6 @@
 import {
   ADD_OBJECT_FIELD_TYPE,
+  MODIFY_OBJECT_FIELD_TYPE,
 } from '../actions';
 import uniq from 'lodash/uniq';
 
@@ -25,6 +26,16 @@ export const objectTypesFieldReducer = (
         ...state,
         byId: { ...state.byId, [id]: model },
         allIds: uniq([...state.allIds, id])
+      };
+    }
+    case  MODIFY_OBJECT_FIELD_TYPE: {
+      const { id, inputType, name } = action.payload;
+      const oldState = {...state.byId[id]};
+      oldState.name = name;
+      oldState.inputType = inputType;
+      return {
+        ...state,
+        byId: { ...state.byId, [id]: {...oldState} }
       };
     }
     default:

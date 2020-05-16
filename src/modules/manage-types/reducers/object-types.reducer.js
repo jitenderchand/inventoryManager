@@ -42,6 +42,9 @@ export const objectTypesReducer = (
       const { id, objectTypeId } = action.payload;
       const oldState = {...state.byId[objectTypeId]};
       oldState.fieldIds = [...oldState.fieldIds, id];
+      if(!oldState.titleFieldId){
+        oldState.titleFieldId = id;
+      }
       return {
         ...state,
         byId: { ...state.byId, [objectTypeId]: {...oldState} }
