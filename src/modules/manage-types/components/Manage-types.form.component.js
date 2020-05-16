@@ -9,9 +9,10 @@ import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import ClearIcon from '@material-ui/icons/Clear';
 import uniqid from 'uniqid';
 import { Input, Label, Select } from "../../../common/components";
-import { modifyObjectTypeValues, addObjectFieldType, modifyObjectFieldType, modifyObjectTitle } from "../actions";
+import { modifyObjectTypeValues, addObjectFieldType, modifyObjectFieldType, modifyObjectTitle, deleteObjectType } from "../actions";
 import { INPUT_TYPE_ENUM, INPUT_TYPE_ENUM_VALUE } from '../../../constant';
 import { getFieldList } from '../selectors/index.selector';
 
@@ -132,12 +133,15 @@ class MangeTypeFormComponent extends PureComponent {
   }
 
   render() {
-    const { className, data, fields } = this.props;
-    const { name } = data;
+    const { className, data, fields, deleteObjectType } = this.props;
+    const { name, id } = data;
     const objectTitleObj = fields.find((datum) => datum.id === data.titleFieldId) || '';
     return (
         <div className={className}>
           <h4>{name}</h4>
+          <button className="close-btn" onClick={() => deleteObjectType(id)}>
+            <ClearIcon />
+          </button>
           <Formik
           enableReinitialize
           initialValues={{
@@ -181,7 +185,8 @@ const mapDispatchToProps = (dispatch) => {
       modifyObjectTypeValues,
       addObjectFieldType,
       modifyObjectFieldType,
-      modifyObjectTitle
+      modifyObjectTitle,
+      deleteObjectType
     },
     dispatch
   );
@@ -195,6 +200,7 @@ export const MangeTypeForm = styled(
   margin-right: 10px;
   border-radius: 4px;
   margin-bottom: 10px;
+  position: relative;   
   .field-row {
     margin-bottom: 10px;
   }
@@ -225,5 +231,12 @@ export const MangeTypeForm = styled(
     button {
      width: 100%;
     }
+  }
+  .close-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: transparent;
+    border: none;
   }
 `;

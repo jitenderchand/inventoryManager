@@ -1,10 +1,12 @@
+import uniq from 'lodash/uniq';
 import {
   ADD_OBJECT_FIELD_TYPE,
   ADD_OBJECT_TYPE,
   MODIFY_OBJECT_TYPE_VALUE,
-  MODIFY_OBJECT_TITLE
+  MODIFY_OBJECT_TITLE,
+  DELETE_OBJECT_TYPE
 } from '../actions';
-import uniq from 'lodash/uniq';
+
 
 export const defaultState = {
   byId: {},
@@ -58,6 +60,16 @@ export const objectTypesReducer = (
       return {
         ...state,
         byId: { ...state.byId, [objectTypeId]: {...oldState} }
+      };
+    }
+    case DELETE_OBJECT_TYPE: {
+      const id = action.payload;
+      const cloneState = {...state.byId};
+      delete cloneState[id];
+      return {
+        ...state,
+        byId: { ...cloneState },
+        allIds: state.allIds.filter((id) => id != id)
       };
     }
     default:

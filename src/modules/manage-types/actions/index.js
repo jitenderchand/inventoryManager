@@ -35,3 +35,11 @@ export const MODIFY_OBJECT_TITLE =
 export const modifyObjectTitle = createAction(
   MODIFY_OBJECT_TITLE
 );
+
+
+export const DELETE_OBJECT_TYPE =
+  'objector.delete.object.type';
+
+export const deleteObjectType = createAction(
+  DELETE_OBJECT_TYPE
+);

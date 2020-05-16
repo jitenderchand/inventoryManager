@@ -72,7 +72,7 @@ export const MangeTypesPage =  styled(
     text-align: right;
     justify-content: flex-end;
   }
-  .object-type {
+  .object-type {  
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
